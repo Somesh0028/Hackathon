@@ -7,21 +7,20 @@ from streamlit_image_coordinates import streamlit_image_coordinates
 # Load color dataset
 @st.cache_data
 def load_colors():
-    df = pd.read_csv("colors.csv", sep='\t')  # Ensure your CSV uses tabs
+    df = pd.read_csv("colors.csv")  # Make sure this file exists and is comma-separated
     return df
 
 color_data = load_colors()
 st.write("🎨 Loaded Color Data Sample:")
 st.dataframe(color_data.head())
 
-# Find closest color name
+# Find closest color name using Euclidean distance
 def get_color_name(R, G, B, color_data):
     min_dist = float('inf')
     closest_color = None
     for _, row in color_data.iterrows():
         try:
-            # ✅ Fixed Euclidean distance formula
-           d = ((R - int(row['R']))**2 + (G - int(row['G']))**2 + (B - int(row['B']))**2) * 0.5  # Euclidean distance
+            d = ((R - int(row['R']))**2 + (G - int(row['G']))**2 + (B - int(row['B']))**2) * 0.5
             if d < min_dist:
                 min_dist = d
                 closest_color = row
@@ -70,3 +69,4 @@ if uploaded_file is not None:
             """, unsafe_allow_html=True)
         else:
             st.warning("⚠️ Clicked outside image bounds.")
+
